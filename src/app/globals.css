@@ -1,0 +1,746 @@
+@import 'tailwindcss';
+
+/* ============================================================================
+   MUHAMMAD TRAVELS — DESIGN SYSTEM
+   Spec §06. Palette drawn from the Kiswah: near-black silk, Hizam gold thread,
+   Haram marble. The governing rule is the gold ratio — the Kiswah is
+   overwhelmingly black and the gold is *thread*, covering perhaps five per cent
+   of the surface. Gold appears here only as hairlines, small-caps labels, icon
+   strokes, the licence badge and the premium tier marker. Never as a fill.
+   ========================================================================= */
+
+@theme {
+  /* --- Core palette ------------------------------------------------------ */
+  --color-kiswah: #12110e; /* Primary ground   */
+  --color-soft: #1f1d18; /* Raised surfaces  */
+  --color-hizam: #c9a227; /* Accent ON DARK   */
+  --color-antique: #8a6b22; /* Gold ON LIGHT    */
+  --color-marble: #f5f1e8; /* Light ground     */
+
+  /* --- Supporting -------------------------------------------------------- */
+  --color-warm: #fcfaf5; /* Cards on marble  */
+  --color-stone: #6e6a5f; /* Secondary text   */
+  --color-rule-light: #e2ddd0; /* Borders on marble*/
+  --color-rule-dark: #332f26; /* Borders on black */
+  --color-whatsapp: #25d366; /* BRAND-LOCKED     */
+
+  /* --- Type -------------------------------------------------------------- */
+  --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia,
+    'Times New Roman', serif;
+  --font-sans: var(--font-inter), Inter, system-ui, -apple-system, 'Segoe UI',
+    sans-serif;
+
+  /* --- Radius (Spec §06: 8px cards, 6px buttons, 4px inputs) ------------- */
+  --radius-card: 8px;
+  --radius-btn: 6px;
+  --radius-input: 4px;
+
+  /* --- Elevation. Two shadows across the whole system. No more. ---------- */
+  --shadow-card: 0 1px 2px rgb(18 17 14 / 0.04), 0 8px 24px rgb(18 17 14 / 0.06);
+  --shadow-modal: 0 2px 8px rgb(18 17 14 / 0.08), 0 24px 64px rgb(18 17 14 / 0.18);
+
+  /* --- Motion ------------------------------------------------------------ */
+  --ease-quiet: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================================
+   BASE
+   ========================================================================= */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Reserve room for the fixed mobile action bar so it never obscures
+       content — Spec §07 "never obscuring content". */
+    scroll-padding-top: 96px;
+  }
+
+  body {
+    background-color: var(--color-marble);
+    color: var(--color-kiswah);
+    font-family: var(--font-sans);
+    font-size: 17px; /* Spec §06: body 17/27, never below 16px on mobile */
+    line-height: 27px;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden; /* the page body must never scroll sideways */
+  }
+
+  /* Prices and distances must align in columns — Spec §06 Numerals. */
+  .tabular,
+  table,
+  time,
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  h1 {
+    font-size: 40px;
+    line-height: 44px;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: 30px;
+    line-height: 36px;
+  }
+  h3 {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  @media (min-width: 1024px) {
+    h1 {
+      font-size: 56px;
+      line-height: 60px;
+    }
+    h2 {
+      font-size: 36px;
+      line-height: 42px;
+    }
+  }
+
+  /* Visible keyboard focus on every interactive element — Spec §07. */
+  :focus-visible {
+    outline: 2px solid var(--color-antique);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .on-dark :focus-visible,
+  .on-dark :focus-visible * {
+    outline-color: var(--color-hizam);
+  }
+
+  ::selection {
+    background: var(--color-hizam);
+    color: var(--color-kiswah);
+  }
+
+  /* Explicit dimensions everywhere keep CLS under 0.05 — Spec §08. */
+  img,
+  svg {
+    max-width: 100%;
+  }
+}
+
+/* ============================================================================
+   TYPE UTILITIES
+   The width contrast between a large serif heading and a small letterspaced
+   small-caps label is where the premium feel actually comes from — Spec §06.
+   ========================================================================= */
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-antique);
+}
+
+@utility eyebrow-dark {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-hizam);
+}
+
+@utility lede {
+  font-size: 19px;
+  line-height: 31px;
+  color: var(--color-stone);
+  max-width: 68ch; /* body copy capped at roughly 70 characters — Spec §06 */
+}
+
+@utility prose-measure {
+  max-width: 68ch;
+}
+
+/* ============================================================================
+   LAYOUT
+   Container 1200px max, 20px gutters mobile, 40px desktop — Spec §06.
+   ========================================================================= */
+
+@utility container-x {
+  width: 100%;
+  max-width: 1240px; /* 1200 content + 2×20 gutter */
+  margin-inline: auto;
+  padding-inline: 20px;
+
+  @media (min-width: 1024px) {
+    max-width: 1280px; /* 1200 content + 2×40 gutter */
+    padding-inline: 40px;
+  }
+}
+
+/* Section rhythm. Spec §06 "Space, above everything" — padding increased by
+   half over a standard build: 96px mobile, 140px desktop. */
+@utility section {
+  padding-block: 96px;
+  @media (min-width: 1024px) {
+    padding-block: 140px;
+  }
+}
+
+/* The tighter rhythm from the spacing scale, for stacked sub-sections. */
+@utility section-tight {
+  padding-block: 64px;
+  @media (min-width: 1024px) {
+    padding-block: 96px;
+  }
+}
+
+/* ============================================================================
+   HAIRLINES — never borders, never 2px, never solid gold blocks. Spec §06.
+   1px gold rules at 40–60% opacity.
+   ========================================================================= */
+
+@utility hairline-gold {
+  height: 1px;
+  width: 100%;
+  background-color: color-mix(in srgb, var(--color-hizam) 55%, transparent);
+}
+
+@utility hairline-gold-light {
+  height: 1px;
+  width: 100%;
+  background-color: color-mix(in srgb, var(--color-antique) 45%, transparent);
+}
+
+@utility rule-light {
+  border-color: var(--color-rule-light);
+}
+
+@utility rule-dark {
+  border-color: var(--color-rule-dark);
+}
+
+/* ============================================================================
+   SURFACES
+   ========================================================================= */
+
+@utility surface-card {
+  background-color: var(--color-warm);
+  border: 1px solid var(--color-rule-light);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* Premium tier: black with a gold rule. Signals the tier without a price label
+   having to — Spec §06. */
+@utility surface-premium {
+  background-color: var(--color-kiswah);
+  border: 1px solid color-mix(in srgb, var(--color-hizam) 40%, transparent);
+  border-radius: var(--radius-card);
+  color: var(--color-marble);
+  box-shadow: var(--shadow-card);
+}
+
+/* ============================================================================
+   BUTTONS
+   Tap targets 44×44px minimum, 8px minimum spacing — Spec §07.
+   ========================================================================= */
+
+@utility btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding-inline: 24px;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 0.25s var(--ease-quiet),
+    color 0.25s var(--ease-quiet),
+    border-color 0.25s var(--ease-quiet),
+    transform 0.25s var(--ease-quiet);
+}
+
+@utility btn-primary {
+  background-color: var(--color-kiswah);
+  color: var(--color-marble);
+  border: 1px solid var(--color-kiswah);
+
+  &:hover {
+    background-color: var(--color-soft);
+    transform: translateY(-1px);
+  }
+}
+
+/* On a dark ground the primary inverts to marble — gold is never a fill. */
+@utility btn-primary-invert {
+  background-color: var(--color-marble);
+  color: var(--color-kiswah);
+  border: 1px solid var(--color-marble);
+
+  &:hover {
+    background-color: #fff;
+    transform: translateY(-1px);
+  }
+}
+
+@utility btn-ghost {
+  background-color: transparent;
+  color: var(--color-kiswah);
+  border: 1px solid var(--color-rule-light);
+
+  &:hover {
+    border-color: var(--color-antique);
+    transform: translateY(-1px);
+  }
+}
+
+@utility btn-ghost-dark {
+  background-color: transparent;
+  color: var(--color-marble);
+  border: 1px solid color-mix(in srgb, var(--color-hizam) 45%, transparent);
+
+  &:hover {
+    border-color: var(--color-hizam);
+    background-color: color-mix(in srgb, var(--color-hizam) 8%, transparent);
+    transform: translateY(-1px);
+  }
+}
+
+/* WhatsApp's own green. Brand-locked — deliberately NOT restyled to the
+   palette. It is the one exception, and users recognise it precisely because
+   it is not our colour. Spec §05. */
+@utility btn-whatsapp {
+  background-color: var(--color-whatsapp);
+  color: #05261a;
+  border: 1px solid var(--color-whatsapp);
+
+  &:hover {
+    background-color: #1fbb59;
+    transform: translateY(-1px);
+  }
+}
+
+/* ============================================================================
+   INPUTS — 4px radius, 16px minimum text so iOS never zooms on focus.
+   ========================================================================= */
+
+@utility field {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-kiswah);
+  background-color: #fff;
+  border: 1px solid var(--color-rule-light);
+  border-radius: var(--radius-input);
+  transition:
+    border-color 0.2s var(--ease-quiet),
+    box-shadow 0.2s var(--ease-quiet);
+
+  &::placeholder {
+    color: color-mix(in srgb, var(--color-stone) 70%, transparent);
+  }
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--color-antique) 50%, transparent);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-antique);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-antique) 16%, transparent);
+  }
+}
+
+/* ============================================================================
+   TABLES — horizontally scrollable in their own container. The page body must
+   never scroll sideways. Spec §07.
+   ========================================================================= */
+
+@utility scroll-x {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule-light) transparent;
+}
+
+/* ============================================================================
+   IMAGERY GRADE
+   "Grade the whole set identically. One warm, slightly darkened treatment
+   across every image. This is what makes a mixed set look commissioned rather
+   than collected." — Spec §06. Applied to every photograph on the site via a
+   single wrapper class so the grade is defined in exactly one place.
+   ========================================================================= */
+
+@utility graded {
+  position: relative;
+  overflow: hidden;
+
+  & img {
+    filter: saturate(0.9) contrast(1.04) brightness(0.94) sepia(0.1);
+  }
+
+  /* Warm darkening wash — the second half of the grade. */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgb(18 17 14 / 0.12) 0%,
+      rgb(18 17 14 / 0.04) 45%,
+      rgb(18 17 14 / 0.42) 100%
+    );
+  }
+}
+
+/* A deeper wash for hero imagery that carries text over it. */
+@utility graded-hero {
+  &::after {
+    background:
+      linear-gradient(180deg, rgb(18 17 14 / 0.55) 0%, rgb(18 17 14 / 0.35) 40%, rgb(18 17 14 / 0.92) 100%),
+      linear-gradient(90deg, rgb(18 17 14 / 0.7) 0%, rgb(18 17 14 / 0.15) 65%);
+  }
+}
+
+/* ============================================================================
+   BRAND LOGO
+   ============================================================================
+   The supplied logo artwork is a flat PNG on a PURE BLACK ground with no alpha
+   channel, and its Kaaba faces sit only ~14 levels above that ground. Keying
+   the background out is not viable — see the note in the asset build script —
+   so the seam is dissolved optically instead.
+
+   `logo-plate` paints a known Kiswah-black backdrop and isolates it into its
+   own stacking context; `logo-blend` screens the artwork over it:
+
+       result = 1 − (1 − src)(1 − backdrop)
+
+   Black source pixels resolve to exactly the plate colour, so the rectangle
+   disappears, while the gold, the marble and the Kaaba's own silhouette pass
+   through essentially untouched.
+
+   The isolation matters: without it the blend would resolve against whatever
+   ancestor stacking context happens to be nearest, which differs between the
+   sticky header and the static footer.
+   ========================================================================= */
+
+@utility logo-plate {
+  display: inline-flex;
+  isolation: isolate;
+  background-color: var(--color-kiswah);
+}
+
+@utility logo-blend {
+  mix-blend-mode: screen;
+}
+
+/* Blending is decorative. If a browser cannot do it, the artwork still reads
+   correctly — it simply shows its own black ground against the near-black
+   frame rather than dissolving into it. */
+@supports not (mix-blend-mode: screen) {
+  .logo-blend {
+    mix-blend-mode: normal;
+  }
+}
+
+/* ============================================================================
+   MOTION
+   "Restrained motion. Slow, subtle fades on scroll. No parallax, no counters
+   spinning up, no carousels." — Spec §06.
+
+   Every reveal is gated behind `html.js`. With JavaScript disabled — and for
+   the AI crawlers in Spec §08 that cannot execute it — the hidden state is
+   never applied and all content renders visible in the HTML.
+   ========================================================================= */
+
+@keyframes quiet-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes quiet-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hairline-extend {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes stroke-draw {
+  from {
+    stroke-dashoffset: var(--draw-length, 240);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes slow-drift {
+  0%,
+  100% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.06) translate3d(0, -0.8%, 0);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes bar-rise {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* --- Scroll reveal ------------------------------------------------------- */
+
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.75s var(--ease-quiet),
+    transform 0.75s var(--ease-quiet);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+html.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Gold hairlines extend from the left as their section arrives. */
+html.js [data-reveal-rule] {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.9s var(--ease-quiet);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+html.js [data-reveal-rule].is-visible {
+  transform: scaleX(1);
+}
+
+/* Icon strokes draw themselves in. */
+html.js [data-draw] path,
+html.js [data-draw] circle,
+html.js [data-draw] rect,
+html.js [data-draw] line,
+html.js [data-draw] polyline {
+  stroke-dasharray: var(--draw-length, 240);
+  stroke-dashoffset: var(--draw-length, 240);
+  transition: stroke-dashoffset 1.4s var(--ease-quiet);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+html.js [data-draw].is-visible path,
+html.js [data-draw].is-visible circle,
+html.js [data-draw].is-visible rect,
+html.js [data-draw].is-visible line,
+html.js [data-draw].is-visible polyline {
+  stroke-dashoffset: 0;
+}
+
+/* --- Named animation utilities ------------------------------------------- */
+
+@utility anim-rise {
+  animation: quiet-rise 0.8s var(--ease-quiet) both;
+}
+
+@utility anim-fade {
+  animation: quiet-fade 0.9s var(--ease-quiet) both;
+}
+
+@utility anim-rule {
+  transform-origin: left center;
+  animation: hairline-extend 1s var(--ease-quiet) both;
+}
+
+@utility anim-sheet {
+  animation: sheet-in 0.32s var(--ease-quiet) both;
+}
+
+@utility anim-bar {
+  animation: bar-rise 0.45s var(--ease-quiet) both;
+}
+
+/* A 28-second breath on the hero photograph. Not parallax — the image does not
+   move against the scroll; it simply is not frozen. */
+@utility anim-drift {
+  animation: slow-drift 28s ease-in-out infinite;
+}
+
+/* --- Card lift ----------------------------------------------------------- */
+
+@utility lift {
+  transition:
+    transform 0.4s var(--ease-quiet),
+    box-shadow 0.4s var(--ease-quiet),
+    border-color 0.4s var(--ease-quiet);
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--color-antique) 55%, transparent);
+  }
+}
+
+@utility lift-dark {
+  transition:
+    transform 0.4s var(--ease-quiet),
+    border-color 0.4s var(--ease-quiet);
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--color-hizam) 75%, transparent);
+  }
+}
+
+/* Photographs ease in their frame on hover. Slow enough to read as considered. */
+@utility zoom-frame {
+  & img {
+    transition: transform 1.1s var(--ease-quiet);
+  }
+  &:hover img {
+    transform: scale(1.045);
+  }
+}
+
+/* ============================================================================
+   FAQ ACCORDION — THE ACCORDION RULE, Spec §05
+   "GPTBot, ClaudeBot and PerplexityBot cannot click." Built on native
+   <details open>, so the answer text is present in the served HTML in every
+   state. CSS handles the visual collapse; nothing is ever fetched on click.
+   ========================================================================= */
+
+.faq-item > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.faq-item > summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item .faq-answer {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.4s var(--ease-quiet);
+}
+.faq-item .faq-answer > div {
+  overflow: hidden;
+}
+.faq-item:not([open]) .faq-answer {
+  grid-template-rows: 0fr;
+}
+
+.faq-item .faq-chevron {
+  transition: transform 0.4s var(--ease-quiet);
+}
+.faq-item[open] .faq-chevron {
+  transform: rotate(180deg);
+}
+
+/* ============================================================================
+   REDUCED MOTION — Spec §07 "Respect prefers-reduced-motion".
+   Everything above collapses to its finished state.
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.js [data-reveal],
+  html.js [data-reveal-rule],
+  html.js [data-reveal].is-visible,
+  html.js [data-reveal-rule].is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  html.js [data-draw] path,
+  html.js [data-draw] circle,
+  html.js [data-draw] rect,
+  html.js [data-draw] line,
+  html.js [data-draw] polyline {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   PRINT
+   ========================================================================= */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+}
