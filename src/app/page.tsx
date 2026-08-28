@@ -174,7 +174,10 @@ export default function HomePage() {
         <div className="hairline-gold absolute inset-x-0 top-0 opacity-70" />
         <div className="container-x">
           <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
-            <div>
+            {/* Flex column so the CTA row can be pinned to the bottom on
+                desktop, letting this column span the same height as the
+                licence card beside it. */}
+            <div className="flex flex-col">
               <Reveal className="mb-5 flex items-center gap-3">
                 <Eyebrow tone="dark">Licence &amp; verification</Eyebrow>
                 <RevealRule delay={130} className="hairline-gold h-px w-14 shrink-0" />
@@ -194,7 +197,10 @@ export default function HomePage() {
                 anyone else you are considering.
               </Reveal>
 
-              <Reveal delay={220} className="mt-8 flex flex-wrap gap-3">
+              {/* lg:mt-auto pins this to the bottom of the flex column so the
+                  two columns finish level. Below lg the grid is single-column
+                  and the cell is content-height, so mt-8 still applies. */}
+              <Reveal delay={220} className="mt-8 flex flex-wrap gap-3 lg:mt-auto">
                 <Link href="/licence/" className="btn-base btn-primary-invert group">
                   <Shield width={18} height={18} />
                   Our licence details
