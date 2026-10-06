@@ -929,6 +929,92 @@ export const packages: Package[] = [
     similar: ['umrah-14-nights-standard', 'umrah-14-nights-economy'],
   },
 
+  /* ------------------------------------------------------------------ 09b */
+  {
+    slug: 'umrah-9-days-december',
+    trip: 'umrah',
+    tier: 'economy',
+    name: '9-Day December Umrah',
+    h1: '9-Day December Umrah Package from Lahore',
+    title: '9-Day December Umrah Package 2026 from Lahore | Muhammad Travels',
+    metaDescription:
+      'PKR 330,000 per person, quad sharing. Saudia flights from Lahore 8–16 December 2026, 3-star hotels 300m from Masjid al-Haram, visa and transfers included.',
+    answer:
+      'Our 9-day December Umrah package costs PKR 330,000 per person on quad sharing and includes return Saudia flights from Lahore (8–16 December 2026), the Umrah visa, five nights at Nawara Shams in Makkah 300m from Masjid al-Haram, four nights at Maysan Al Taqwa in Madinah, and all transfers. Hotels are room only.',
+    summary:
+      'A short, fixed-date winter Umrah from Lahore on Saudia. Five nights in Makkah within 300 metres of the Haram, four in Madinah, room-only hotels so you eat where and when you like.',
+    nights: 9,
+    makkahNights: 5,
+    madinahNights: 4,
+    priceFrom: 330000,
+    priceCurrency: 'PKR',
+    priceValidUntil: '2026-11-30',
+    priceValidUntilLabel: '30 November 2026',
+    roomBasis: 'Quad sharing',
+    airline: 'Saudia',
+    hotels: [
+      {
+        city: 'Makkah',
+        name: 'Nawara Shams Hotel',
+        stars: 3,
+        distanceM: 300,
+        walkMinutes: 5,
+        roomType: 'Quad sharing, attached bath',
+        board: 'Room only',
+        image: hotel.roomTwin,
+        verified: false,
+      },
+      {
+        city: 'Madinah',
+        name: 'Maysan Al Taqwa Hotel',
+        stars: 3,
+        // TODO: distance not supplied with the package — confirm before publishing.
+        distanceM: 350,
+        walkMinutes: 5,
+        roomType: 'Quad sharing, attached bath',
+        board: 'Room only',
+        image: hotel.roomModern,
+        verified: false,
+      },
+    ],
+    includes: [
+      'Return economy airfare — Saudia, Lahore → Jeddah (8 Dec) and Madinah → Lahore (16 Dec)',
+      'Umrah visa processed through Nusuk Masar in our own name',
+      'Hotel accommodation in Makkah (5 nights) and Madinah (4 nights) as listed above, room only',
+      'Private transfer on arrival: Jeddah airport → Makkah hotel',
+      'Coach (bus) transfer: Makkah hotel → Madinah hotel',
+      'Private transfer on departure: Madinah hotel → Madinah airport',
+    ],
+    excludes: [
+      'All meals — both hotels are on a room-only basis',
+      'Guided Ziyarat in Makkah and Madinah',
+      ...baseExcludes.filter((e) => !e.startsWith('Meals beyond')),
+    ],
+    itinerary: [
+      { day: 'Day 1 · 8 Dec', title: 'Lahore to Jeddah, transfer to Makkah', detail: 'Saudia flight from Lahore to Jeddah. After immigration and biometric checks, a private transfer takes you straight to Nawara Shams in Makkah. Ihram is assumed before crossing the Miqat.' },
+      { day: 'Day 2', title: 'Umrah', detail: 'Rested, you perform Tawaf and Sa’i at Masjid al-Haram, 300 metres from the hotel, completing the Umrah with halq or taqsir.' },
+      { day: 'Days 3–5', title: 'Makkah', detail: 'Free days for prayer at the Haram. The hotel is room only, so meals are at your own choice in the surrounding area.' },
+      { day: 'Day 6', title: 'Bus to Madinah', detail: 'Checkout and coach transfer from the Makkah hotel to Maysan Al Taqwa in Madinah, roughly five hours.' },
+      { day: 'Days 7–8', title: 'Madinah', detail: 'Free days for prayer at Al-Masjid an-Nabawi and a visit to Riyadh ul-Jannah, subject to a Nusuk permit.' },
+      { day: 'Day 9 · 16 Dec', title: 'Madinah to Lahore', detail: 'Checkout and private transfer from the hotel to Madinah airport for the Saudia flight home to Lahore.' },
+    ],
+    departures: [
+      { iso: '2026-12-08', label: '8 December 2026', seatsLeft: null },
+    ],
+    departureCities: ['lahore'],
+    faqs: [
+      { q: 'What does PKR 330,000 cover?', a: 'Return Saudia airfare from Lahore, the Umrah visa, five nights in Makkah and four in Madinah on quad sharing, a private transfer from Jeddah airport to the Makkah hotel, the bus from Makkah to Madinah, and a private transfer to Madinah airport at the end. Meals are not included.' },
+      { q: 'How much is it for a family of four?', a: 'PKR 1,320,000 in total for four people sharing one quad room (4 × PKR 330,000). Triple and double rooms are available at a supplement — ask us on WhatsApp and we will quote the exact difference in writing.' },
+      { q: 'What does “room only” mean?', a: 'The hotel provides the room and nothing else — no breakfast or other meals. Both hotels are surrounded by restaurants and food courts, so most pilgrims find this easier and cheaper than fixed hotel meal times.' },
+      { q: 'How far is the Makkah hotel from Masjid al-Haram?', a: 'Nawara Shams is about 300 metres from the Haram, roughly a five-minute walk. We publish the metre figure rather than “walking distance” so you can compare it directly against any other operator.' },
+      { q: 'Are the travel dates fixed?', a: 'Yes. The group flies Lahore to Jeddah on 8 December 2026 and returns Madinah to Lahore on 16 December 2026. Rates are subject to availability and current market conditions, so the price is only guaranteed once we confirm your booking in writing.' },
+      { q: 'Can I verify that you are a licensed operator?', a: 'Please do. Our registered company name and licence numbers are published on our licence page, with instructions for checking them against the Ministry’s list of certified operators.' },
+    ],
+    image: hotel.roomTwin,
+    featured: true,
+    similar: ['umrah-10-nights-economy', 'umrah-14-nights-economy'],
+  },
+
   /* ------------------------------------------------------------------ 10 */
   {
     slug: 'hajj-shorter-package',
